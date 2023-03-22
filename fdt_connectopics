@@ -55,14 +55,40 @@ But not sure if all of these are needed
   %   [3]   Estimate dimensionality using Maximum Likelihood Estimation
           
             Compute the MLE on M to get out nGrads
+            
+            library(factoextra)
+
+            # Use prcomp function to compute the principal components
+            pca <- prcomp(M)
+
+            # Use MLE to estimate the number of principal components (think this is nGrads)
+            nPC <- Mclust::MclustICL(pca$x)$best.model$name
 
   %   [4]   Compute Laplacian (and eigenvectors) on the graph
   
-            Use W and nGrads
+            Calculate degree matrix from W but also need number of gradients
+            
+            Requires the Matrix package (used above)
+            
+            library(Matrix)
+
+            degs <- Matrix::colSums(W) # Compute the degree of each node by summing the rows of W
+            D <- Matrix::sparse.diagonal(x = degs, nrow = nrow(W), ncol = ncol(W)) # Create a diagonal sparse matrix with degs as diagonal entries
+
+            % compute un-normalised Laplacian matrix
+            L <- D - W
+            
+            % compute the eigenvectors corresponding to the k smallest
+            % eigenvalues
+            
+            eig <- eigen(L, D)
+
+            # Sort  eigenvalues in ascending order and extract the first k smallest eigenvectors
+            idx <- order(eig$values)
+            maps <- eig$vectors[,idx][,1:k]
+            eigenvals <- diag(eig$values[idx][1:k])
+            
+            % Or maybe this will work:
             
             laplacian_matrix(W)  %uses igraph (not sure if need to estimate dim)
 
-% Diffusion mapping embedding in R (instead of Laplacian approach)
-install.packages('diffusionMap')
-library(diffusionMap)
-adapreg( ) % adaptive regression: non-parametric dimensionality reduction
