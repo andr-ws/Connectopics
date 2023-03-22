@@ -1,0 +1,17 @@
+% Create the similarity matrix from fdt_matrix2 
+
+Perhaps use eta^2
+%                    Cohen AL, Fair DA, Dosenbach NUF, et al. Defining 
+%                    Functional Areas in Individual Human Brains using 
+%                    Resting Functional Connectivity MRI. NeuroImage. 
+%                    2008;41(1):45-57. doi:10.1016/j.neuroimage.2008.01.066.
+
+% Sparse graph, adjacency matrix 
+install.packages('igraph')
+library('igraph')
+get.adjacency((as.matrix(%dat%), directed=FALSE))
+
+% Diffusion mapping embedding in R (instead of Laplacian approach)
+install.packages('diffusionMap')
+library(diffusionMap)
+adapreg( ) % adaptive regression: non-parametric dimensionality reduction
