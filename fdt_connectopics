@@ -1,4 +1,5 @@
 % fdt_matrix2 is the file we want in...
+% Think this is seed voxels X target voxels
 
 The MrCat conngrads also reqs: fdt_paths, coords_for_fdt_matrix2_file, tract_space_coords_for_fdt_matrix2_file
 But not sure if all of these are needed
