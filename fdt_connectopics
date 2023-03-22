@@ -15,8 +15,35 @@ But not sure if all of these are needed
     % [1]   Compute the similarity matrix from fdt_matrix2 (between voxel similarity
             % use eta^2 as per Cohen et al,(2008) Defining Functional Areas in Individual Human Brains using 
             % Resting Functional Connectivity MRI. /// doi:10.1016/j.neuroimage.2008.01.066.
-
+            
+            % 1 = same, 0 = entirely dissimilar
+            
             Computing similarity and get out S
+
+            
+            R code is:
+            
+            eta2 <- matrix(0, nrow = nrow(data), ncol = nrow(data)) # Initialize eta2 matrix
+
+            for (i in 1:nrow(eta2)) {
+                        for (j in i:ncol(eta2)) {
+                         mi <- (data[i,] + data[j,]) / 2 # Calculate mi
+                         mm <- mean(mi) # Calculate mm
+                         ssw <- sum((data[i,] - mi)^2 + (data[j,] - mi)^2) # Calculate ssw (sumsqrdist of 2 samples from their mean)
+                         sst <- sum((data[i,] - mm)^2 + (data[j,] - mm)^2) # Calculate sst (sumsqrdist of 2 samples from overall mean)
+                         eta2[i,j] <- 1 - ssw/sst # Calculate eta2
+                        }
+            }
+
+            S <- eta2 + t(eta2) - diag(diag(eta2)) # Symmetrize eta2, add to its transpose and subtract identity matrix to remove self-similarities
+
+            
+            % Wondering if this is simpler and would work:
+            
+            install.packages('lsr')
+            library(lsr)
+                        
+            S <- etaSquared(dat)
 
     % [2]   Compute a sparse graph (adjacency matrix)
 
